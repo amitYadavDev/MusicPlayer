@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "amitApps.media.musicplayer"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "amitApps.media.musicplayer"
@@ -32,6 +32,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    buildFeatures {
+        viewBinding = true
     }
 }
 
