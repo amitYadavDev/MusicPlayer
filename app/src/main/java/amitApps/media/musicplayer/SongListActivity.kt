@@ -1,11 +1,13 @@
 package amitApps.media.musicplayer
 
 import amitApps.media.musicplayer.databinding.ActivitySongListBinding
+import android.animation.ValueAnimator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,6 +36,8 @@ class SongListActivity : AppCompatActivity() {
     }
 
     private fun initElementAnimation() {
-        viewBinding.recyclerView.layoutManager = LinearLayoutManager(this)
+        wheelAnimation = AnimationUtils.loadAnimation(this, R.anim.rotation_wheel)
+        wheelAnimation.duration = 1000
+        wheelAnimation.repeatCount = ValueAnimator.INFINITE
     }
 }
