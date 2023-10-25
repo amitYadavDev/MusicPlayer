@@ -26,8 +26,12 @@ class SongListActivity : AppCompatActivity() {
         // setup background UI
         setBackground()
 
-        // initialize Element Animation
+        // initialize Animation
         initElementAnimation()
+
+
+        // initialization of rv
+        initRecyclerView()
     }
 
     private fun setBackground() {
@@ -40,4 +44,10 @@ class SongListActivity : AppCompatActivity() {
         wheelAnimation.duration = 1000
         wheelAnimation.repeatCount = ValueAnimator.INFINITE
     }
+
+    private fun initRecyclerView() {
+        viewBinding.recyclerView.layoutManager = LinearLayoutManager(this)
+        val adapter = SongListAdapter(presenter)
+    }
+
 }
