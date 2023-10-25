@@ -1,7 +1,10 @@
 package amitApps.media.musicplayer
 
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.widget.RemoteViews
 import java.beans.PropertyChangeEvent
 import java.beans.PropertyChangeListener
@@ -34,10 +37,35 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
     private lateinit var intentNEXT: PendingIntent
     private lateinit var intentCANCEL: PendingIntent
 
+    private val receiver = object: BroadcastReceiver() {
+        override fun onReceive(p0: Context?, intent: Intent?) {
+            when(intent?.action) {
+                NOTIFICATION_PREVIOUS -> skipToPrevious()
+                NOTIFICATION_PLAY -> {
+                    if(isPlaying) {
+                        pause()
+                    } else {
+                        play()
+                    }
+                }
+                NOTIFICATION_NEXT -> skipToNext()
+                NOTIFICATION_CANCEL -> {
+                    pause()
+                    stopForeground(true)
 
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        stopForeground(STOP_FOREGROUND_DETACH)
+                    }
+                    stopSelf()
+                }
 
+            }
+        }
+    }
 
-
+    private fun skipToPrevious() {
+        TODO("Not yet implemented")
+    }
 
 
 }
