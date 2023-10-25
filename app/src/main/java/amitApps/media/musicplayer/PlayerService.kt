@@ -4,7 +4,12 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.media.MediaMetadataRetriever
+import android.net.Uri
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
+import android.provider.MediaStore
 import android.widget.RemoteViews
 import java.beans.PropertyChangeEvent
 import java.beans.PropertyChangeListener
@@ -56,12 +61,30 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         stopForeground(STOP_FOREGROUND_DETACH)
                     }
+
+                    // release service from the background
                     stopSelf()
                 }
 
             }
         }
     }
+
+    // Accessing Audio file from local storage
+    private val metadataRetriever = MediaMetadataRetriever()
+    private val uriExternal: Uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+
+    private val mHandler: Handler = Handler(Looper.getMainLooper()) {msg ->
+        val id = msg.data.getString("songID")
+        val audioUri = Uri.withAppendedPath(uriExternal, id)
+
+        try {
+            contentResolver.openFileDescriptor(audioUri, "r")?.use {
+                if(addSong())
+            }
+        }
+    }
+
 
     private fun skipToPrevious() {
         TODO("Not yet implemented")
