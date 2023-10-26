@@ -37,10 +37,14 @@ class PlayerManager : PropertyChangeSupport(this) {
             return@setOnErrorListener false
         }
     }
-    private fun setChangedNotify(event: String) {
+    fun setChangedNotify(event: String) {
         Timber.i("setChangedNotify  $event")
     }
-    fun setPlayerProgress(): Int {
+
+    fun setPlayerProgress(progress: Int) {
+        playerProgress = progress * 1000
+    }
+    fun getPlayerProgress(): Int {
         return if (mediaPlayer.isPlaying) {
             mediaPlayer.currentPosition / 1000
         } else {
@@ -48,7 +52,7 @@ class PlayerManager : PropertyChangeSupport(this) {
         }
     }
 
-    private fun play(fileDescriptor: FileDescriptor) {
+    fun play(fileDescriptor: FileDescriptor) {
         if(mediaPlayer.isPlaying) {
             mediaPlayer.stop()
         }
@@ -57,12 +61,12 @@ class PlayerManager : PropertyChangeSupport(this) {
         mediaPlayer.prepareAsync()
     }
 
-    private fun seekTo(progress: Int) {
+    fun seekTo(progress: Int) {
         playerProgress = progress * 1000
         mediaPlayer.seekTo(playerProgress)
     }
 
-    private fun pause() {
+    fun pause() {
         playerProgress = mediaPlayer.currentPosition
         if(mediaPlayer.isPlaying) {
             mediaPlayer.pause()
@@ -70,7 +74,7 @@ class PlayerManager : PropertyChangeSupport(this) {
         setChangedNotify(ACTION_PAUSE)
     }
 
-    private fun stop() {
+    fun stop() {
         if(mediaPlayer.isPlaying) {
             mediaPlayer.stop()
             mediaPlayer.release()

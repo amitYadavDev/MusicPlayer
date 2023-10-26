@@ -1,5 +1,6 @@
 package amitApps.media.musicplayer
 
+import amitApps.media.musicplayer.player.PlayerManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -11,6 +12,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import android.widget.RemoteViews
+import timber.log.Timber
 import java.beans.PropertyChangeEvent
 import java.beans.PropertyChangeListener
 import java.io.FileDescriptor
@@ -43,7 +45,10 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
     private lateinit var intentNEXT: PendingIntent
     private lateinit var intentCANCEL: PendingIntent
 
-    private val songList: MutableList<Song> = MutableList()
+    private val songList: MutableList<Song> = mutableListOf()
+    private val playerManager = PlayerManager()
+    private var isPlaying: Boolean = false // mediaPlayer.isPlaying may take some time update status
+    private var playerPosition: Int = 0    // song queue position
 
     private val receiver = object: BroadcastReceiver() {
         override fun onReceive(p0: Context?, intent: Intent?) {
@@ -73,6 +78,41 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
         }
     }
 
+    private fun pause() {
+        isPlaying = false
+        playerManager.pause()
+    }
+
+    private fun play(position: Int = playerPosition) {
+        isPlaying = true
+
+        // is diff song
+        if(position != playerPosition) {
+            playerManager.setPlayerProgress(0)
+        }
+
+        playerPosition = when {
+            songList.size < 1 -> {
+                playerManager.setChangedNotify(ACTION_NOT_SONG_FOUND)
+                return
+            }
+            position >= songList.size -> 0
+            position < 0 ->songList.lastIndex
+            else -> position
+        }
+
+        val audioUri = Uri.withAppendedPath(uriExternal, songList[playerPosition].id)
+
+        contentResolver.openFileDescriptor(audioUri, "r")?.use {
+            playerManager.play(it.fileDescriptor)
+        } ?: kotlin.run {
+            songList.removeAt(playerPosition)
+            playerManager.setChangedNotify(ACTION_NOT_SONG_FOUND)
+
+            play()
+        }
+    }
+
     // Accessing Audio file from local storage
     private val metadataRetriever = MediaMetadataRetriever()
     private val uriExternal: Uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
@@ -86,10 +126,28 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
         try {
             contentResolver.openFileDescriptor(audioUri, "r")?.use {
                 if(addSong(it.fileDescriptor, id!!, getSongTitle(audioUri))) {
-                    PlayerManager
+                    playerManager.setChangedNotify(ACTION_FIND_NEW_SONG)
                 }
             }
+        } catch (e : Exception) {
+            Timber.e(e)
         }
+        true
+    }
+
+    private fun getSongTitle(audioUri: Uri): String {
+        var title = audioUri.lastPathSegment
+
+        // contentResolver is way to interact with data stored on the device.
+        //It acts as a bridge between your Android application and the data stored in various content providers.
+
+        contentResolver.query(audioUri, null, null, null, null)?.use {
+            if(it.moveToNext()) {
+                title = it.getString(it.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE))
+            }
+        }
+        return title ?: ""
+
     }
 
 
