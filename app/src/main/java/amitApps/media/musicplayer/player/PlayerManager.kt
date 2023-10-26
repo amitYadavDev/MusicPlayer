@@ -3,6 +3,7 @@ package amitApps.media.musicplayer.player
 import android.media.MediaPlayer
 import java.beans.PropertyChangeListener
 import java.beans.PropertyChangeSupport
+import java.io.FileDescriptor
 
 class PlayerManager : PropertyChangeSupport(this) {
     companion object {
@@ -27,5 +28,31 @@ class PlayerManager : PropertyChangeSupport(this) {
             mediaPlayer.start()
             setChangedNotify(ACTION_PLAY)
         }
+        mediaPlayer.setOnCompletionListener {
+            setChangedNotify(ACTION_COMPLETE)
+        }
+        mediaPlayer.setOnErrorListener { mediaPlayer, what, extra ->
+            Timber.e("MediaPlayer error type:$what, code:$extra, currentPosition:${mediaPlayer.currentPosition}")
+            return@setOnErrorListener false
+        }
+    }
+    private fun setChangedNotify(event: String) {
+        Timber.i("setChangedNotify  $event")
+    }
+    fun setPlayerProgress(): Int {
+        return if (mediaPlayer.isPlaying) {
+            mediaPlayer.currentPosition / 1000
+        } else {
+            playerProgress / 1000
+        }
+    }
+
+    private fun play(fileDescriptor: FileDescriptor) {
+        if(mediaPlayer.isPlaying) {
+            mediaPlayer.stop()
+        }
+        mediaPlayer.reset()
+        mediaPlayer.setDataSource(fileDescriptor)
+        mediaPlayer.prepareAsync()
     }
 }
