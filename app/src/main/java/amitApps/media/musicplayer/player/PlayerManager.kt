@@ -4,6 +4,7 @@ import android.media.MediaPlayer
 import java.beans.PropertyChangeListener
 import java.beans.PropertyChangeSupport
 import java.io.FileDescriptor
+import timber.log.Timber
 
 class PlayerManager : PropertyChangeSupport(this) {
     companion object {
@@ -54,5 +55,25 @@ class PlayerManager : PropertyChangeSupport(this) {
         mediaPlayer.reset()
         mediaPlayer.setDataSource(fileDescriptor)
         mediaPlayer.prepareAsync()
+    }
+
+    private fun seekTo(progress: Int) {
+        playerProgress = progress * 1000
+        mediaPlayer.seekTo(playerProgress)
+    }
+
+    private fun pause() {
+        playerProgress = mediaPlayer.currentPosition
+        if(mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+        }
+        setChangedNotify(ACTION_PAUSE)
+    }
+
+    private fun stop() {
+        if(mediaPlayer.isPlaying) {
+            mediaPlayer.stop()
+            mediaPlayer.release()
+        }
     }
 }
