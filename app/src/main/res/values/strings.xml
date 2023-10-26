@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MusicPlayer</string>
+    <string name="unknown">\u003c unknown \u003e</string>
 </resources>
