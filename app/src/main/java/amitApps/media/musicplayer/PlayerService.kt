@@ -7,8 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.os.Binder
 import android.os.Build
 import android.os.Handler
+import android.os.IBinder
 import android.os.Looper
 import android.provider.MediaStore
 import android.widget.RemoteViews
@@ -49,6 +51,7 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
     private val playerManager = PlayerManager()
     private var isPlaying: Boolean = false // mediaPlayer.isPlaying may take some time update status
     private var playerPosition: Int = 0    // song queue position
+    var isRandom: Boolean = false
 
     private val receiver = object: BroadcastReceiver() {
         override fun onReceive(p0: Context?, intent: Intent?) {
@@ -75,6 +78,14 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
                 }
 
             }
+        }
+    }
+
+    fun skipToNext() {
+        if(!isRandom) {
+            play(playerPosition + 1)
+        } else {
+            play((0 until songList.size).random())
         }
     }
 
@@ -135,6 +146,8 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
         true
     }
 
+    private val audioObserver: AudioObserver = AudioObserver(mHandler)
+
     private fun getSongTitle(audioUri: Uri): String {
         var title = audioUri.lastPathSegment
 
@@ -187,6 +200,16 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
             return false
         }
         return true
+    }
+
+
+    inner class LocalBinder : Binder() {}
+    override fun onBind(p0: Intent?): IBinder? {
+        TODO("Not yet implemented")
+    }
+
+    override fun propertyChange(p0: PropertyChangeEvent?) {
+        TODO("Not yet implemented")
     }
 
 }
