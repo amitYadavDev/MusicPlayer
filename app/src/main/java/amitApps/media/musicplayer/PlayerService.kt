@@ -5,6 +5,7 @@ import amitApps.media.musicplayer.player.PlayerManager.Companion.ACTION_COMPLETE
 import amitApps.media.musicplayer.player.PlayerManager.Companion.ACTION_PAUSE
 import amitApps.media.musicplayer.player.PlayerManager.Companion.ACTION_PLAY
 import amitApps.media.musicplayer.player.PlayerManager.Companion.ACTION_STOP
+import android.app.Notification
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -254,7 +255,17 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
     }
 
     private fun createNotification(): Notification {
+        val song = getSong()
+        smallRemoteView.setTextViewText(R.id.tv_name, song?.name)
 
+    }
+
+    private fun getSong(): Song? {
+        return if (songList.size > 0) {
+            songList[playerPosition]
+        } else {
+            null
+        }
     }
 
 }
