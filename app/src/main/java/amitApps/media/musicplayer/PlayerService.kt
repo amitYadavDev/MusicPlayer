@@ -14,6 +14,7 @@ import android.os.IBinder
 import android.os.Looper
 import android.provider.MediaStore
 import android.widget.RemoteViews
+import com.google.firebase.crashlytics.buildtools.reloc.com.google.j2objc.annotations.Weak
 import timber.log.Timber
 import java.beans.PropertyChangeEvent
 import java.beans.PropertyChangeListener
@@ -203,7 +204,14 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
     }
 
 
-    inner class LocalBinder : Binder() {}
+    inner class LocalBinder : Binder() {
+        // Return this instance of PlayerService so clients can call public methods
+//        val service: PlayerService = this@PlayerService
+
+        val service by Weak {
+            this@PlayerService
+        }
+    }
     override fun onBind(p0: Intent?): IBinder? {
         TODO("Not yet implemented")
     }

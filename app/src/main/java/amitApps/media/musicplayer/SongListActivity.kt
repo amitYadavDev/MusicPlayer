@@ -12,7 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 
-class SongListActivity : AppCompatActivity() {
+class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
     private lateinit var viewBinding: ActivitySongListBinding
     private lateinit var wheelAnimation: Animation
 
