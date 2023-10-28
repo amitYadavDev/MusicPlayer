@@ -1,6 +1,10 @@
 package amitApps.media.musicplayer
 
 import amitApps.media.musicplayer.player.PlayerManager
+import amitApps.media.musicplayer.player.PlayerManager.Companion.ACTION_COMPLETE
+import amitApps.media.musicplayer.player.PlayerManager.Companion.ACTION_PAUSE
+import amitApps.media.musicplayer.player.PlayerManager.Companion.ACTION_PLAY
+import amitApps.media.musicplayer.player.PlayerManager.Companion.ACTION_STOP
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -14,6 +18,7 @@ import android.os.IBinder
 import android.os.Looper
 import android.provider.MediaStore
 import android.widget.RemoteViews
+import android.widget.Toast
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.j2objc.annotations.Weak
 import timber.log.Timber
 import java.beans.PropertyChangeEvent
@@ -53,6 +58,7 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
     private var isPlaying: Boolean = false // mediaPlayer.isPlaying may take some time update status
     private var playerPosition: Int = 0    // song queue position
     var isRandom: Boolean = false
+    var isRepeat: Boolean = false
 
     private val receiver = object: BroadcastReceiver() {
         override fun onReceive(p0: Context?, intent: Intent?) {
@@ -212,12 +218,43 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
             this@PlayerService
         }
     }
+
+    private var binder: LocalBinder? = null
+
+
     override fun onBind(p0: Intent?): IBinder? {
-        TODO("Not yet implemented")
+        return binder
     }
 
-    override fun propertyChange(p0: PropertyChangeEvent?) {
-        TODO("Not yet implemented")
+    override fun propertyChange(event: PropertyChangeEvent) {
+        when (event.propertyName) {
+            ACTION_COMPLETE -> {
+                playerManager.setPlayerProgress(0)
+
+                when {
+                    isRepeat -> play()
+                    isRandom -> play((0 until songList.size).random())
+                    else -> skipToNext()
+                }
+            }
+            ACTION_PLAY, ACTION_PAUSE -> {
+                startForeground(NOTIFICATION_ID_MUSIC, createNotification())
+            }
+            ACTION_STOP -> {
+                isPlaying = false
+            }
+            ACTION_FIND_NEW_SONG -> {
+                Toast.makeText(this, getString(R.string.found_new_song), Toast.LENGTH_SHORT).show()
+            }
+            ACTION_NOT_SONG_FOUND -> {
+                Toast.makeText(this, getString(R.string.no_song_found), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    }
+
+    private fun createNotification(): Notification {
+
     }
 
 }
