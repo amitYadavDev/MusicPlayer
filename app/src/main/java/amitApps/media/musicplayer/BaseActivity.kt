@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import com.google.android.material.snackbar.Snackbar
 
 abstract class BaseActivity<P : BasePresenter<*>> : AppCompatActivity(),
@@ -16,6 +17,13 @@ abstract class BaseActivity<P : BasePresenter<*>> : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         presenter = createPresenter()
     }
+
+/*    lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED) checks
+    if the component's current state is at least in the "STARTED" state or a more advanced state
+    (e.g., "RESUMED"). If it is, the condition will evaluate to true. This is often used to determine
+    if certain actions should be taken when a component is in a certain state, like starting or stopping background
+    tasks when an activity is at least in the "STARTED" state.    */
+    override fun isActive(): Boolean = lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
 
     override fun showToast(msg: String) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
