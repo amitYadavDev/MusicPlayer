@@ -4,6 +4,7 @@ import amitApps.media.musicplayer.databinding.ActivitySongListBinding
 import amitApps.media.musicplayer.databinding.AdapterSongListBinding
 import android.os.Parcel
 import android.os.Parcelable
+import android.util.TimeUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
@@ -25,6 +26,13 @@ class SongListAdapter(private val presenter: SongListPresenter):
         val viewBinding =
             AdapterSongListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return SongHolder(viewBinding)
+    }
+
+    override fun onBindViewHolder(holder: SongHolder, position: Int) {
+        val song: Song = getItem(position)
+        holder.viewBinding.tvName.text = song.name
+        holder.viewBinding.tvArtist.text = song.author
+        holder.viewBinding.tvDuration.text = TimeUtil.timeMillisToTime(song.duration)
     }
 
 }
