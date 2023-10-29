@@ -102,7 +102,7 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
         playerManager.pause()
     }
 
-    private fun play(position: Int = playerPosition) {
+    fun play(position: Int = playerPosition) {
         isPlaying = true
 
         // is diff song
