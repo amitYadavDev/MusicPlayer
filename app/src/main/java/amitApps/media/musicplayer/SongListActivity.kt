@@ -78,4 +78,10 @@ class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
         setListen()
     }
 
+    private fun setListen() {
+        viewBinding.edName.addTextChangedListener {
+            presenter.filterSong(it.toString)
+        }
+    }
+
 }
