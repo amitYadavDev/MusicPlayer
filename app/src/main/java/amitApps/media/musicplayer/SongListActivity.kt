@@ -50,6 +50,12 @@ class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
         })
     }
 
+    override fun onDestroy() {
+        loadingDialog?.dismiss()
+        loadingDialog = null
+        super.onDestroy()
+    }
+
     private fun setBackground() {
         viewBinding.root.background = ContextCompat.getDrawable(this, R.drawable.background_music)
         viewBinding.root.background.alpha = 30
@@ -65,5 +71,7 @@ class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
         viewBinding.recyclerView.layoutManager = LinearLayoutManager(this)
         val adapter = SongListAdapter(presenter)
     }
+
+    override fun playerBound()
 
 }
