@@ -21,6 +21,8 @@ import android.provider.MediaStore
 import android.widget.RemoteViews
 import android.widget.Toast
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.j2objc.annotations.Weak
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.beans.PropertyChangeEvent
 import java.beans.PropertyChangeListener
@@ -260,11 +262,34 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
 
     }
 
+    fun addPlayerObserver(listener: PropertyChangeListener) =
+        playerManager.addPropertyChangeListener(listener)
+
     private fun getSong(): Song? {
         return if (songList.size > 0) {
             songList[playerPosition]
         } else {
             null
+        }
+    }
+
+/*    withContext(Dispatchers.IO) is used to change the coroutine's context to the I/O dispatcher.
+    This means that any code inside the block passed to withContext will execute in the background
+    on a thread dedicated to I/O operations, rather than on the main thread.*/
+    suspend fun readSong() = withContext(Dispatchers.IO){
+//    If you want to return a value from the withContext block, you use return@withContext
+        if(songList.isNotEmpty()) return@withContext
+
+        contentResolver.query(uriExternal, null, null, null, null)?.use {
+            val indexID: Int = it.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
+            val indexTitle: Int = it.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)
+
+            while(it.moveToNext()) {
+                val id = it.getString(indexID)
+                val title = it.getString(indexTitle)
+                val audioUri = Uri.withAppendedPath(uriExternal, id)
+
+            }
         }
     }
 

@@ -37,10 +37,16 @@ open class BaseSongActivity<P: BasePresenter<*>>: BaseActivity<P>(), PropertyCha
         }
     }
 
+    private fun playerBound(player: PlayerService) {
+        presenter.setPlayerManager(player)
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkPermission()
     }
+
 
     private fun checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

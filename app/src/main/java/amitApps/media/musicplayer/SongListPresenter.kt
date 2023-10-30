@@ -4,6 +4,7 @@ import android.util.SparseArray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class SongListPresenter constructor(view: SongListView): BasePresenter<SongListView>(view) {
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO + Job())
@@ -11,6 +12,18 @@ class SongListPresenter constructor(view: SongListView): BasePresenter<SongListV
     private lateinit var player: PlayerService
     private val filteredSongList: SparseArray<Song> = SparseArray()
 
+    fun setPlayerManager(playerService: PlayerService) {
+        player = playerService
+        loadSongList()
+    }
+
+    private fun loadSongList() {
+        scope.launch {
+            view.showLoading()
+
+            player.readSong()
+        }
+    }
 
 
     fun onSongClick(index: Int) {
