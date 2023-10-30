@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,6 +33,21 @@ class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
 
         // initialization of rv
         initRecyclerView()
+
+/*        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) { ... }):
+        This code sets up a callback to handle the back button press. It uses the OnBackPressedCallback class
+        and is added to the onBackPressedDispatcher for the current activity or fragment.  */
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if(backHandler.hasMessages(0)) finish()
+                else {
+                    showToast(getString(R.string.press_again_to_exit))
+                    backHandler.removeCallbacksAndMessages(null)
+                    backHandler.postDelayed({}, 2000)
+                }
+            }
+        })
     }
 
     private fun setBackground() {
