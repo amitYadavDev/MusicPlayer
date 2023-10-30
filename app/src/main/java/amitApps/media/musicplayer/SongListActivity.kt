@@ -72,6 +72,10 @@ class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
         val adapter = SongListAdapter(presenter)
     }
 
-    override fun playerBound()
+    override fun playerBound(player: PlayerService) {
+        presenter.setPlayerManager(player)
+
+        setListen()
+    }
 
 }
