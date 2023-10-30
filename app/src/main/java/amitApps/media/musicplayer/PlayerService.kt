@@ -289,8 +289,14 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
                 val title = it.getString(indexTitle)
                 val audioUri = Uri.withAppendedPath(uriExternal, id)
 
+                contentResolver.openFileDescriptor(audioUri, "r")?.use {
+                    addSong(it.fileDescriptor, id, title)
+                }
+
             }
         }
     }
+
+    fun setPlayerManager
 
 }
