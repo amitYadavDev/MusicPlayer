@@ -3,6 +3,7 @@ package amitApps.media.musicplayer
 import amitApps.media.musicplayer.databinding.ActivitySongListBinding
 import android.animation.ValueAnimator
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -10,6 +11,7 @@ import android.os.Looper
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
@@ -110,6 +112,21 @@ class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
 
                 startActivity(Intent(this, PlaySongActivity::class.java), options.toBundle())
             }
+        }
+    }
+
+    private fun openGithub() {
+        val intent =
+            Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/amit/MusicPlayer"))
+
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        } else {
+            Toast.makeText(
+                this,
+                getString(R.string.cant_open_browser),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
