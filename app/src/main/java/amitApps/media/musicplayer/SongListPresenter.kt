@@ -12,6 +12,7 @@ class SongListPresenter constructor(view: SongListView): BasePresenter<SongListV
 
     private lateinit var player: PlayerService
     private val filteredSongList: SparseArray<Song> = SparseArray()
+    private lateinit var adapter: SongListAdapter
 
     fun setPlayerManager(playerService: PlayerService) {
         player = playerService
@@ -55,5 +56,13 @@ class SongListPresenter constructor(view: SongListView): BasePresenter<SongListV
             }
         }
     }
+    fun onSongPlay() {
+        if (!player.isPlaying()) {
+            player.play()
+        } else {
+            player.pause()
+        }
+    }
+
 
 }

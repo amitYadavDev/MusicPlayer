@@ -99,10 +99,6 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
         }
     }
 
-    private fun pause() {
-        isPlaying = false
-        playerManager.pause()
-    }
 
     fun play(position: Int = playerPosition) {
         isPlaying = true
@@ -297,6 +293,14 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
         }
     }
 
+    fun getSongList() = songList.toList()
+    fun isPlaying(): Boolean = isPlaying
+
+    fun pause() {
+        isPlaying = false
+
+        playerManager.pause()
+    }
     fun setPlayerManager
 
 }
