@@ -6,11 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
+import androidx.core.util.Pair
 import androidx.recyclerview.widget.LinearLayoutManager
 
 class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
@@ -80,7 +83,32 @@ class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
 
     private fun setListen() {
         viewBinding.edName.addTextChangedListener {
-            presenter.filterSong(it.toString)
+            presenter.filterSong(it.toString())
+        }
+
+        viewBinding.imgInfo.setOnClickListener {
+            openGithub()
+        }
+
+        viewBinding.btnPlay.setOnClickListener {
+            presenter.onSongPlay()
+
+            viewBinding.bottomAppBar.performShow()
+        }
+
+        viewBinding.bottomAppBar.setOnClickListener {
+            if (viewBinding.tvName.text.isNotEmpty() || viewBinding.tvArtist.text.isNotEmpty()) {
+                val p1: Pair<View, String> =
+                    Pair.create(viewBinding.imgDisc, viewBinding.imgDisc.transitionName)
+                val p2: Pair<View, String> =
+                    Pair.create(viewBinding.tvName, viewBinding.tvName.transitionName)
+                val p3: Pair<View, String> =
+                    Pair.create(viewBinding.btnPlay, viewBinding.btnPlay.transitionName)
+
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, p1, p2, p3)
+
+                startActivity(Intent(this, PlaySongActivity::class.java), options.toBundle())
+            }
         }
     }
 

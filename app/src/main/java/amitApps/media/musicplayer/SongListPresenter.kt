@@ -5,6 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SongListPresenter constructor(view: SongListView): BasePresenter<SongListView>(view) {
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO + Job())
@@ -35,6 +36,24 @@ class SongListPresenter constructor(view: SongListView): BasePresenter<SongListV
 
     private fun playSong(position: Int) {
         player.play(position)
+    }
+
+    fun filterSong(key: String) {
+        scope.launch {
+            filteredSongList.clear()
+
+            val list = mutableListOf<Song>()
+            player.getSongList().forEachIndexed { index, song ->
+                if (song.name.contains(key, true) || song.author.contains(key, true)) {
+                    filteredSongList.put(index, song)
+                    list.add(song)
+                }
+            }
+
+            withContext(Dispatchers.Main) {
+                adapter.submitList(list)
+            }
+        }
     }
 
 }
