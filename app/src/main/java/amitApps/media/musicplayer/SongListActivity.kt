@@ -2,6 +2,7 @@ package amitApps.media.musicplayer
 
 import amitApps.media.musicplayer.databinding.ActivitySongListBinding
 import android.animation.ValueAnimator
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import android.os.Looper
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
@@ -128,6 +130,11 @@ class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
                 Toast.LENGTH_SHORT
             ).show()
         }
+    }
+
+    private fun hideKeyBoard() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(viewBinding.edName.windowToken, 0)
     }
 
 }
