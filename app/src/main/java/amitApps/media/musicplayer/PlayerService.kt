@@ -170,7 +170,7 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
     }
 
 
-    private fun skipToPrevious() {
+    fun skipToPrevious() {
         TODO("Not yet implemented")
     }
     private fun addSong(fileDescriptor: FileDescriptor, id: String, songTitle: String): Boolean {
@@ -261,7 +261,7 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
     fun addPlayerObserver(listener: PropertyChangeListener) =
         playerManager.addPropertyChangeListener(listener)
 
-    private fun getSong(): Song? {
+    fun getSong(): Song? {
         return if (songList.size > 0) {
             songList[playerPosition]
         } else {

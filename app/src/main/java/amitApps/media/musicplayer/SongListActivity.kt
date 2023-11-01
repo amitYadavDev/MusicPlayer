@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
+import java.beans.PropertyChangeEvent
 
 class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
     private lateinit var viewBinding: ActivitySongListBinding
@@ -59,10 +60,26 @@ class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
         })
     }
 
+    override fun playBound(player: PlayerService) {
+        TODO("Not yet implemented")
+    }
+
+    override fun updateState() {
+        TODO("Not yet implemented")
+    }
+
+    override fun createPresenter(): SongListPresenter {
+        TODO("Not yet implemented")
+    }
+
     override fun onDestroy() {
         loadingDialog?.dismiss()
         loadingDialog = null
         super.onDestroy()
+    }
+
+    override fun propertyChange(p0: PropertyChangeEvent?) {
+        TODO("Not yet implemented")
     }
 
     private fun setBackground() {
@@ -136,6 +153,22 @@ class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
     private fun hideKeyBoard() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(viewBinding.edName.windowToken, 0)
+    }
+
+    override fun showLoading() {
+        TODO("Not yet implemented")
+    }
+
+    override fun stopLoading() {
+        TODO("Not yet implemented")
+    }
+
+    override fun updateSongState(song: Song, isPlaying: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onSongClick() {
+        TODO("Not yet implemented")
     }
 
 }

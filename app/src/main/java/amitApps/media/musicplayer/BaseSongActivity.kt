@@ -37,7 +37,7 @@ abstract class BaseSongActivity<P: BasePresenter<*>>: BaseActivity<P>(), Propert
         }
     }
 
-    private fun playerBound(player: PlayerService) {
+    open fun playerBound(player: PlayerService) {
         presenter.setPlayerManager(player)
 
     }
