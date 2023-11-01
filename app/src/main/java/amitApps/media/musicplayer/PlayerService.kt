@@ -11,6 +11,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.media.MediaMetadataRetriever
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Binder
 import android.os.Build
@@ -62,6 +63,8 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
     private var playerPosition: Int = 0    // song queue position
     var isRandom: Boolean = false
     var isRepeat: Boolean = false
+    private var playerProgress: Int = 0
+    private val mediaPlayer: MediaPlayer = MediaPlayer()
 
     private val receiver = object: BroadcastReceiver() {
         override fun onReceive(p0: Context?, intent: Intent?) {
@@ -301,6 +304,10 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
 
         playerManager.pause()
     }
-    fun setPlayerManager
+    fun getProgress(): Int = playerManager.getPlayerProgress()
+    fun seekTo(progress: Int) {
+        playerProgress = progress * 1000
+        mediaPlayer.seekTo(playerProgress)
+    }
 
 }
