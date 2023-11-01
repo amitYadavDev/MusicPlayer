@@ -21,6 +21,7 @@ import android.os.Looper
 import android.provider.MediaStore
 import android.widget.RemoteViews
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.j2objc.annotations.Weak
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -49,13 +50,13 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
     }
     // For showing notification
     private lateinit var smallRemoteView: RemoteViews
-    private lateinit var largeRemoteViews: RemoteViews
+    private lateinit var largeRemoteView: RemoteViews
 
     //
     private lateinit var intentPREVIOUS: PendingIntent
-    private lateinit var intentPLAY: PendingIntent
-    private lateinit var intentNEXT: PendingIntent
-    private lateinit var intentCANCEL: PendingIntent
+    private lateinit var intentPlay: PendingIntent
+    private lateinit var intentNext: PendingIntent
+    private lateinit var intentCancel: PendingIntent
 
     private val songList: MutableList<Song> = mutableListOf()
     private val playerManager = PlayerManager()
@@ -257,8 +258,49 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
 
     private fun createNotification(): Notification {
         val song = getSong()
-        smallRemoteView.setTextViewText(R.id.tv_name, song?.name)
 
+        smallRemoteView.setTextViewText(R.id.tv_name, song?.name)
+        smallRemoteView.setImageViewResource(
+            R.id.img_play,
+            if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play
+        )
+
+        largeRemoteView.setTextViewText(R.id.tv_name, song?.name)
+        largeRemoteView.setImageViewResource(
+            R.id.img_play,
+            if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play
+        )
+        largeRemoteView.setOnClickPendingIntent(R.id.img_previous, intentPREVIOUS)
+        largeRemoteView.setOnClickPendingIntent(R.id.img_play, intentPlay)
+        largeRemoteView.setOnClickPendingIntent(R.id.img_next, intentNext)
+        largeRemoteView.setOnClickPendingIntent(R.id.img_cancel, intentCancel)
+
+        val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID_MUSIC)
+        notificationBuilder.setSmallIcon(R.drawable.ic_music)
+//            .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.music))
+            .setContentTitle(song?.name)
+            .setContentText(song?.author)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setOnlyAlertOnce(true)
+            .setContentIntent(createContentIntent())
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            .setCustomContentView(smallRemoteView)
+            .setCustomBigContentView(largeRemoteView)    //show full remoteView
+//            .setOngoing(true) // not working when use startForeground()
+
+        return notificationBuilder.build()
+    }
+
+    private fun createContentIntent(): PendingIntent {
+        val intent = Intent(this, SongListActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.action = Intent.ACTION_MAIN
+        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+
+        return PendingIntent.getActivity(
+            this, System.currentTimeMillis().toInt(), intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
     }
 
     fun addPlayerObserver(listener: PropertyChangeListener) =
