@@ -37,10 +37,6 @@ abstract class BaseSongActivity<P: BasePresenter<*>>: BaseActivity<P>(), Propert
         }
     }
 
-    open fun playerBound(player: PlayerService) {
-        presenter.setPlayerManager(player)
-
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +56,7 @@ abstract class BaseSongActivity<P: BasePresenter<*>>: BaseActivity<P>(), Propert
         }
     }
 
-    abstract fun playBound(player: PlayerService)
+    abstract fun playerBound(player: PlayerService)
 
     abstract fun updateState()
 
