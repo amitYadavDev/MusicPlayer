@@ -3,7 +3,11 @@ package amitApps.media.musicplayer
 import java.beans.PropertyChangeEvent
 
 class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
-    override fun playBound(player: PlayerService) {
+    fun playBound(player: PlayerService) {
+        TODO("Not yet implemented")
+    }
+
+    override fun playerBound(player: PlayerService) {
         TODO("Not yet implemented")
     }
 
