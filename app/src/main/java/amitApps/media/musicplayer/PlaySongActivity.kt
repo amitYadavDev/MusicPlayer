@@ -1,8 +1,16 @@
 package amitApps.media.musicplayer
 
+import amitApps.media.musicplayer.databinding.ActivityPlaySongBinding
 import java.beans.PropertyChangeEvent
 
 class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
+    //companion object - It is similar to a static member in Java or a class method
+    companion object {
+        private val STATE_PLAY = intArrayOf(R.attr.state_pause)
+        private val STATE_PAUSE = intArrayOf(-R.attr.state_pause)
+    }
+
+    private lateinit var viewBinding: ActivityPlaySongBinding
     fun playBound(player: PlayerService) {
         TODO("Not yet implemented")
     }
