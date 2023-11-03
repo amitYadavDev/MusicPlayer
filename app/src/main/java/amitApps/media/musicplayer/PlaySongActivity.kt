@@ -1,6 +1,7 @@
 package amitApps.media.musicplayer
 
 import amitApps.media.musicplayer.databinding.ActivityPlaySongBinding
+import android.view.animation.Animation
 import java.beans.PropertyChangeEvent
 
 class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
@@ -11,6 +12,16 @@ class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
     }
 
     private lateinit var viewBinding: ActivityPlaySongBinding
+    private lateinit var wheelAnimation: Animation
+    private lateinit var scaleAnimation: Animation
+
+/*    "Runnable" is an interface that represents a block of code that can be executed.
+    It's often used to perform tasks in a separate thread or to schedule tasks to run after
+    a certain delay. You can create a Runnable and then run it on a separate thread using various Android APIs,
+    such as Handlers, Threads, or Executors.*/
+
+    private lateinit var seekBarUpdateRunnable: Runnable
+    private val seekBarUpdateDelayMillis: Long = 1000
     fun playBound(player: PlayerService) {
         TODO("Not yet implemented")
     }
