@@ -2,6 +2,7 @@ package amitApps.media.musicplayer
 
 import amitApps.media.musicplayer.databinding.ActivityPlaySongBinding
 import android.animation.ValueAnimator
+import android.graphics.Point
 import android.os.Bundle
 import android.transition.ChangeBounds
 import android.view.View
@@ -9,6 +10,8 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import java.beans.PropertyChangeEvent
@@ -77,6 +80,36 @@ class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
 
     override fun playerBound(player: PlayerService) {
         initElementAnimation()
+
+        initFavoriteRunnable()
+    }
+
+    private fun initFavoriteRunnable() {
+        //Animation for heart in playing song activity
+        val position = IntArray(2)
+        viewBinding.imgFavorite.getLocationInWindow(position)
+        val startPoint = Point((position[0]), (position[1]))
+
+        val favoriteDrawable = viewBinding.imgFavorite.drawable
+
+        favoriteAnimationRunnable = Runnable {
+            with(FloatingAnimationView(this)) {
+                setImageDrawable(favoriteDrawable)
+                scaleType = ImageView.ScaleType.CENTER_INSIDE
+                layoutParams = LinearLayout.LayoutParams(80, 80)
+                startPosition = startPoint
+                endPosition = Point(0, 0)
+
+                viewBinding.root.addView(this)
+
+                this.startAnimation()
+            }
+
+            viewBinding.imgFavorite.postDelayed(
+                favoriteAnimationRunnable,
+                favoriteAnimationDelayMillis
+            )
+        }
     }
 
     private fun initElementAnimation() {
