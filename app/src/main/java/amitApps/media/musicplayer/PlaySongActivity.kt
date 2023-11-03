@@ -2,8 +2,10 @@ package amitApps.media.musicplayer
 
 import amitApps.media.musicplayer.databinding.ActivityPlaySongBinding
 import android.os.Bundle
+import android.transition.ChangeBounds
 import android.view.View
 import android.view.animation.Animation
+import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -36,6 +38,20 @@ class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
         viewBinding = ActivityPlaySongBinding.inflate(layoutInflater)
 
         setScreenHigh()
+        setContentView(viewBinding.root)
+
+        viewBinding.tvName.isSelected = true
+
+        initWindowAnimations()
+    }
+
+    private fun initWindowAnimations() {
+//        Shared element transitions allow smooth animations when transitioning
+//                between two Activities or Fragments by animating shared views between them.
+        val enterTransition = ChangeBounds()
+        enterTransition.duration = 1000
+        enterTransition.interpolator = DecelerateInterpolator()
+        window.sharedElementEnterTransition = enterTransition
     }
 
     private fun setScreenHigh() {
