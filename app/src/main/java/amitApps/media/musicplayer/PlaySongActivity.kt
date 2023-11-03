@@ -1,7 +1,12 @@
 package amitApps.media.musicplayer
 
 import amitApps.media.musicplayer.databinding.ActivityPlaySongBinding
+import android.os.Bundle
+import android.view.View
 import android.view.animation.Animation
+import android.widget.FrameLayout
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import java.beans.PropertyChangeEvent
 
 class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
@@ -22,6 +27,36 @@ class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
 
     private lateinit var seekBarUpdateRunnable: Runnable
     private val seekBarUpdateDelayMillis: Long = 1000
+
+    private lateinit var favoriteAnimationRunnable: Runnable
+    private val favoriteAnimationDelayMillis: Long = 300
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewBinding = ActivityPlaySongBinding.inflate(layoutInflater)
+
+        setScreenHigh()
+    }
+
+    private fun setScreenHigh() {
+/*        this code is an example of how you can customize the layout of your Android app to
+        work seamlessly with system bars and window insets,
+        ensuring a good user experience on devices with various screen sizes and aspect ratios*/
+        ViewCompat.setOnApplyWindowInsetsListener(
+            viewBinding.root
+        ) { view: View, windowInsets: WindowInsetsCompat ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.layoutParams = (view.layoutParams as FrameLayout.LayoutParams).apply {
+                // draw on top of the bottom navigation bar
+                bottomMargin = insets.bottom
+            }
+
+            // Return CONSUMED if you don't want the window insets to keep being
+            // passed down to descendant views.
+            WindowInsetsCompat.CONSUMED
+        }
+    }
+
     fun playBound(player: PlayerService) {
         TODO("Not yet implemented")
     }
