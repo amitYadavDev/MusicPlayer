@@ -1,10 +1,12 @@
 package amitApps.media.musicplayer
 
 import amitApps.media.musicplayer.databinding.ActivityPlaySongBinding
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.transition.ChangeBounds
 import android.view.View
 import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import androidx.core.view.ViewCompat
@@ -73,12 +75,20 @@ class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
         }
     }
 
-    fun playBound(player: PlayerService) {
-        TODO("Not yet implemented")
+    override fun playerBound(player: PlayerService) {
+        initElementAnimation()
     }
 
-    override fun playerBound(player: PlayerService) {
-        TODO("Not yet implemented")
+    private fun initElementAnimation() {
+        //Animation for wheel, when song is playing
+        wheelAnimation = AnimationUtils.loadAnimation(this, R.anim.rotation_wheel)
+        wheelAnimation.duration = 1000
+        wheelAnimation.repeatCount = ValueAnimator.INFINITE
+
+        scaleAnimation = AnimationUtils.loadAnimation(this, R.anim.zoom_in)
+        scaleAnimation.duration = 200
+        scaleAnimation.repeatCount = 1
+        scaleAnimation.repeatMode = Animation.REVERSE
     }
 
     override fun updateState() {
@@ -103,6 +113,11 @@ class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
 
     override fun showRandom(isRandom: Boolean) {
         TODO("Not yet implemented")
+    }
+    override fun onStop() {
+        super.onStop()
+        viewBinding.imgFavorite.removeCallbacks(favoriteAnimationRunnable)
+        viewBinding.seekBar.removeCallbacks(seekBarUpdateRunnable)
     }
 
 }
