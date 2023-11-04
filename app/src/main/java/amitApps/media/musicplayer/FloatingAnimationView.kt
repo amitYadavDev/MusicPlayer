@@ -24,4 +24,8 @@ class FloatingAnimationView constructor(
         return Resources.getSystem().displayMetrics.widthPixels
     }
 
+    private fun getScreenHeight(): Int {
+        return Resources.getSystem().displayMetrics.heightPixels
+    }
+
 }
