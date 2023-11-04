@@ -16,7 +16,10 @@ class FloatingAnimationView constructor(
 
     private val random = Random()
 
+    fun startAnimation() {
 
+
+    }
 
 
 //    This function is designed to return the width of the screen in pixels
