@@ -1,6 +1,7 @@
 package amitApps.media.musicplayer
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Point
 import android.util.AttributeSet
 import java.util.Random
@@ -14,5 +15,13 @@ class FloatingAnimationView constructor(
     lateinit var endPosition: Point
 
     private val random = Random()
+
+
+
+
+
+    private fun getScreenWidth(): Int {
+        return Resources.getSystem().displayMetrics.widthPixels
+    }
 
 }
