@@ -19,7 +19,7 @@ class FloatingAnimationView constructor(
 
 
 
-
+//    This function is designed to return the width of the screen in pixels
     private fun getScreenWidth(): Int {
         return Resources.getSystem().displayMetrics.widthPixels
     }
