@@ -156,7 +156,7 @@ class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
     }
 
     override fun showRepeat(isRepeat: Boolean) {
-        TODO("Not yet implemented")
+        viewBinding.imgRepeat.imageAlpha = if (isRepeat) 255 else 80
     }
 
     override fun showRandom(isRandom: Boolean) {
