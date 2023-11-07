@@ -140,8 +140,19 @@ class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
     }
 
     override fun updateSongState(song: Song, isPlaying: Boolean, progress: Int) {
+        /*In Android, "remove callback" refers to the action of canceling a previously
+        scheduled action or task that was set to run on a message queue. A message queue is used to
+        manage the order of execution of tasks or actions within a particular thread.
+        It's often associated with the UI thread, where user interface operations and animations are handled.*/
+
+
         viewBinding.imgFavorite.removeCallbacks(favoriteAnimationRunnable)
         viewBinding.seekBar.removeCallbacks(seekBarUpdateRunnable)
+
+        viewBinding.tvName.text = song.name
+        viewBinding.tvDuration.text = TimeUtil.timeMillisToTime(song.duration)
+        viewBinding.seekBar.max = (song.duration / 1000).toInt()
+        viewBinding.seekBar.progress = progress
     }
 
     override fun showRepeat(isRepeat: Boolean) {
