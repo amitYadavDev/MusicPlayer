@@ -9,7 +9,7 @@ class PlaySongPresenter(view: PlaySongView) : BasePresenter<PlaySongView>(view) 
         fetchSongState()
     }
 
-    private fun fetchSongState() {
+    fun fetchSongState() {
         player.getSong()?.let {
             view.updateSongState(it, player.isPlaying(), player.getProgress())
 

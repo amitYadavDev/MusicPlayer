@@ -1,6 +1,7 @@
 package amitApps.media.musicplayer
 
 import amitApps.media.musicplayer.databinding.ActivityPlaySongBinding
+import amitApps.media.musicplayer.player.PlayerManager
 import android.animation.ValueAnimator
 import android.graphics.Point
 import android.os.Bundle
@@ -125,19 +126,22 @@ class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
     }
 
     override fun updateState() {
-        TODO("Not yet implemented")
+        presenter.fetchSongState()
     }
 
-    override fun createPresenter(): PlaySongPresenter {
-        TODO("Not yet implemented")
-    }
+    override fun createPresenter(): PlaySongPresenter = PlaySongPresenter(this)
 
-    override fun propertyChange(p0: PropertyChangeEvent?) {
-        TODO("Not yet implemented")
+    override fun propertyChange(event: PropertyChangeEvent) {
+        when (event.propertyName) {
+            PlayerManager.ACTION_PLAY, PlayerManager.ACTION_PAUSE -> {
+                updateState()
+            }
+        }
     }
 
     override fun updateSongState(song: Song, isPlaying: Boolean, progress: Int) {
-        TODO("Not yet implemented")
+        viewBinding.imgFavorite.removeCallbacks(favoriteAnimationRunnable)
+        viewBinding.seekBar.removeCallbacks(seekBarUpdateRunnable)
     }
 
     override fun showRepeat(isRepeat: Boolean) {
