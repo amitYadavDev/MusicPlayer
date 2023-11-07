@@ -1,10 +1,14 @@
 package amitApps.media.musicplayer
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Point
 import android.util.AttributeSet
+import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import java.util.Random
 
 class FloatingAnimationView constructor(
@@ -40,7 +44,29 @@ class FloatingAnimationView constructor(
         It can animate various types of values, and in this case, it's animating between the
         startPosition and endPointRandom using a custom evaluator.*/
         val animator = ValueAnimator.ofObject(bezierTypeEvaluator, startPosition, endPointRandom)
+        animator.addUpdateListener { valueAnimator ->
+            val point = valueAnimator.animatedValue as Point
+            val fraction = valueAnimator.animatedFraction
 
+            x = point.x.toFloat()
+            y = point.y.toFloat()
+            alpha = 1 - fraction
+
+            invalidate()
+        }
+
+        animator.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+
+                val viewGroup = parent as ViewGroup
+                viewGroup.removeView(this@FloatingAnimationView)
+            }
+        })
+
+        animator.duration = 2000
+        animator.interpolator = AccelerateDecelerateInterpolator()
+        animator.start()
     }
 
 
