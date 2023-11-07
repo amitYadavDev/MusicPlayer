@@ -1,5 +1,6 @@
 package amitApps.media.musicplayer
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Point
@@ -34,6 +35,12 @@ class FloatingAnimationView constructor(
             Point(random.nextInt(width), random.nextInt(height)),
             Point(random.nextInt(width / 2), random.nextInt(height / 2))
         )
+
+/*        ValueAnimator: This is a class in Android used for animating between different values over time.
+        It can animate various types of values, and in this case, it's animating between the
+        startPosition and endPointRandom using a custom evaluator.*/
+        val animator = ValueAnimator.ofObject(bezierTypeEvaluator, startPosition, endPointRandom)
+
     }
 
 
