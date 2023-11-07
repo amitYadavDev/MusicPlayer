@@ -153,6 +153,9 @@ class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
         viewBinding.tvDuration.text = TimeUtil.timeMillisToTime(song.duration)
         viewBinding.seekBar.max = (song.duration / 1000).toInt()
         viewBinding.seekBar.progress = progress
+        viewBinding.tvProgress.text =
+            TimeUtil.timeMillisToTime((viewBinding.seekBar.progress * 1000).toLong())
+        viewBinding.imgPlay.setImageState(if (isPlaying) STATE_PLAY else STATE_PAUSE, false)
     }
 
     override fun showRepeat(isRepeat: Boolean) {
