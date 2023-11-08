@@ -91,6 +91,14 @@ class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
         setListen()
     }
 
+    private fun setListen() {
+        TODO("Not yet implemented")
+    }
+
+    private fun initSeekBarUpdateRunnable() {
+        TODO("Not yet implemented")
+    }
+
     private fun initFavoriteRunnable() {
         //Animation for heart in playing song activity
         val position = IntArray(2)
