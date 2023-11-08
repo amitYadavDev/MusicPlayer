@@ -83,6 +83,12 @@ class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
         initElementAnimation()
 
         initFavoriteRunnable()
+
+        initSeekBarUpdateRunnable()
+
+        presenter.setPlayerManager(player)
+
+        setListen()
     }
 
     private fun initFavoriteRunnable() {
