@@ -92,7 +92,9 @@ class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
     }
 
     private fun setListen() {
-        TODO("Not yet implemented")
+        viewBinding.imgBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     private fun initSeekBarUpdateRunnable() {
