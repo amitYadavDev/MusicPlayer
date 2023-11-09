@@ -98,10 +98,7 @@ class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
     }
 
     private fun initSeekBarUpdateRunnable() {
-        seekBarUpdateRunnable = Runnable {
-            viewBinding.seekBar.progress = viewBinding.seekBar.progress + 1
-            viewBinding.seekBar.postDelayed(seekBarUpdateRunnable, seekBarUpdateDelayMillis)
-        }
+
     }
 
     private fun initFavoriteRunnable() {
