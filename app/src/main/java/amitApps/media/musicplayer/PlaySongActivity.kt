@@ -142,7 +142,7 @@ class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
     }
 
     override fun updateState() {
-        
+        presenter.fetchSongState()
     }
 
     override fun createPresenter(): PlaySongPresenter = PlaySongPresenter(this)
