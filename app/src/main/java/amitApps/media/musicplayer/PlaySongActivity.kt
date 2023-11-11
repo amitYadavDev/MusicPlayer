@@ -179,7 +179,7 @@ class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
     }
 
     override fun showRandom(isRandom: Boolean) {
-        TODO("Not yet implemented")
+      
     }
     override fun onStop() {
         super.onStop()
