@@ -34,6 +34,11 @@ class SongListPresenter constructor(view: SongListView): BasePresenter<SongListV
         val position = filteredSongList.keyAt(index)
         playSong(position)
     }
+    fun fetchSongState() {
+        player.getSong()?.let {
+            view.updateSongState(it, player.isPlaying())
+        }
+    }
 
     private fun playSong(position: Int) {
         player.play(position)

@@ -60,17 +60,17 @@ class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
         })
     }
 
-    override fun playBound(player: PlayerService) {
-        TODO("Not yet implemented")
-    }
 
     override fun updateState() {
-        TODO("Not yet implemented")
+        presenter.filterSong(viewBinding.edName.text.toString())
+        presenter.fetchSongState()
     }
 
     override fun createPresenter(): SongListPresenter {
         TODO("Not yet implemented")
     }
+
+    
 
     override fun onDestroy() {
         loadingDialog?.dismiss()
