@@ -66,11 +66,9 @@ class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
         presenter.fetchSongState()
     }
 
-    override fun createPresenter(): SongListPresenter {
-        TODO("Not yet implemented")
-    }
+    override fun createPresenter(): SongListPresenter = SongListPresenter(this)
 
-    
+
 
     override fun onDestroy() {
         loadingDialog?.dismiss()
