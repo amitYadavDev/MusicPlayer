@@ -19,11 +19,6 @@ class Weak <T : Any>(initializer: () -> T?){
     }
 
 
-    operator fun getValue(thisRef: Any?, property: KProperty<*>): T? {
-        Timber.d("Weak Delegate getValue")
-        return weakReference.get()
-    }
-
     operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T?) {
         Timber.d("Weak Delegate setValue")
         weakReference = WeakReference(value)
