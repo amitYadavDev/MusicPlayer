@@ -179,7 +179,7 @@ class PlaySongActivity: BaseSongActivity<PlaySongPresenter>(), PlaySongView {
     }
 
     override fun showRandom(isRandom: Boolean) {
-        TODO("Not yet implemented")
+        viewBinding.imgRandom.imageAlpha = if (isRandom) 255 else 80
     }
     override fun onStop() {
         super.onStop()
