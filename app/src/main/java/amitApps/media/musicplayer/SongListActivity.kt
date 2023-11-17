@@ -9,9 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.view.animation.LinearInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -154,7 +156,20 @@ class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
     }
 
     override fun showLoading() {
-        TODO("Not yet implemented")
+        lifecycleScope.launch {
+            val loadViewBinding =
+                DialogLoadingBinding.inflate(LayoutInflater.from(this@SongListActivity))
+
+            val animator = ValueAnimator.ofInt(0, 8).apply {
+                duration = 750
+                interpolator = LinearInterpolator()
+                repeatCount = ValueAnimator.INFINITE
+
+                addUpdateListener {
+                    loadViewBinding.imgLoad.rotation = (it.animatedValue as Int).toFloat() * 45
+                    loadViewBinding.imgLoad.requestLayout()
+                }
+            }
     }
 
     override fun stopLoading() {
