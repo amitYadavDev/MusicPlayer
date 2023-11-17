@@ -185,10 +185,18 @@ class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
                 }
                 show()
             }
+
+            animator.start()
+        }
     }
 
     override fun stopLoading() {
-        TODO("Not yet implemented")
+        lifecycleScope.launch {
+            loadingDialog?.dismiss()
+            loadingDialog = null
+
+            viewBinding.recyclerView.scheduleLayoutAnimation()
+        }
     }
 
     override fun updateSongState(song: Song, isPlaying: Boolean) {
