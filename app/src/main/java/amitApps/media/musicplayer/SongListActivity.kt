@@ -214,7 +214,8 @@ class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
     }
 
     override fun onSongClick() {
-        TODO("Not yet implemented")
+        hideKeyBoard()
+        viewBinding.bottomAppBar.performShow()
     }
 
 }
