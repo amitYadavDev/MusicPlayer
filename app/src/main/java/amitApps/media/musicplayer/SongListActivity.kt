@@ -1,6 +1,7 @@
 package amitApps.media.musicplayer
 
 import amitApps.media.musicplayer.databinding.ActivitySongListBinding
+import amitApps.media.musicplayer.databinding.DialogLoadingBinding
 import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
@@ -22,7 +23,10 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.launch
 import java.beans.PropertyChangeEvent
 
 class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
@@ -169,6 +173,17 @@ class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
                     loadViewBinding.imgLoad.rotation = (it.animatedValue as Int).toFloat() * 45
                     loadViewBinding.imgLoad.requestLayout()
                 }
+            }
+
+            loadingDialog = MaterialAlertDialogBuilder(context()).create().apply {
+                window?.setBackgroundDrawableResource(android.R.color.transparent)
+                setView(loadViewBinding.root)
+                setCancelable(false)
+                setOnDismissListener {
+                    animator.removeAllListeners()
+                    animator.cancel()
+                }
+                show()
             }
     }
 
