@@ -200,7 +200,17 @@ class SongListActivity : BaseSongActivity<SongListPresenter>(), SongListView {
     }
 
     override fun updateSongState(song: Song, isPlaying: Boolean) {
-        TODO("Not yet implemented")
+        lifecycleScope.launch {
+            viewBinding.tvName.text = song.name
+            viewBinding.tvArtist.text = song.author
+            viewBinding.btnPlay.setImageResource(if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play)
+
+            if (isPlaying) {
+                viewBinding.imgDisc.startAnimation(wheelAnimation)
+            } else {
+                viewBinding.imgDisc.clearAnimation()
+            }
+        }
     }
 
     override fun onSongClick() {
