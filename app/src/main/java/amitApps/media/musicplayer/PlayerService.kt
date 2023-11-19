@@ -352,6 +352,10 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
         playerProgress = progress * 1000
         mediaPlayer.seekTo(playerProgress)
     }
+
+    private fun initRemoteView() {
+
+    }
     private fun registerReceiver() {
         //intenfilter is typically used in the manifest file to declare which intents the component is capable of handling
         val intentFilter = IntentFilter()
