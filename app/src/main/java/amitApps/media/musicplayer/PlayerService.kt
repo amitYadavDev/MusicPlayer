@@ -354,6 +354,8 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
     }
 
     private fun initRemoteView() {
+        smallRemoteView = RemoteViews(packageName, R.layout.notification_small)
+        largeRemoteView = RemoteViews(packageName, R.layout.notification_large)
 
     }
     private fun registerReceiver() {
