@@ -353,6 +353,7 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
         mediaPlayer.seekTo(playerProgress)
     }
     private fun registerReceiver() {
+        //intenfilter is typically used in the manifest file to declare which intents the component is capable of handling
         val intentFilter = IntentFilter()
         intentFilter.addAction(NOTIFICATION_PREVIOUS)
         intentFilter.addAction(NOTIFICATION_PLAY)
