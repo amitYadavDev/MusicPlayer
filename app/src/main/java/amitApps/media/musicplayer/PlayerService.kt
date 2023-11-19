@@ -10,6 +10,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.net.Uri
@@ -351,5 +352,12 @@ class PlayerService: android.app.Service(), PropertyChangeListener {
         playerProgress = progress * 1000
         mediaPlayer.seekTo(playerProgress)
     }
-
+    private fun registerReceiver() {
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(NOTIFICATION_PREVIOUS)
+        intentFilter.addAction(NOTIFICATION_PLAY)
+        intentFilter.addAction(NOTIFICATION_NEXT)
+        intentFilter.addAction(NOTIFICATION_CANCEL)
+        registerReceiver(receiver, intentFilter)
+    }
 }
